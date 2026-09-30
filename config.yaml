@@ -1,0 +1,33 @@
+# ReconPilot configuration — PSP economics, matching tolerances, ledger backend.
+psps:
+  adyen:
+    settlement_lag_days: 2
+    contracted_fee_rate: 0.019   # 1.9%
+    currencies: [GBP, EUR, USD]
+  stripe:
+    settlement_lag_days: 1
+    contracted_fee_rate: 0.022   # 2.2%
+    currencies: [GBP, EUR, USD]
+  shift4:
+    settlement_lag_days: 2
+    contracted_fee_rate: 0.020   # 2.0%
+    currencies: [GBP, USD]
+
+matching:
+  fx_drift_tolerance_pct: 0.005   # 50 bps
+  fx_drift_tolerance_minor: 25    # ...or 25 minor units, whichever is larger
+  date_buffer_days: 2             # extra slack beyond the PSP lag window
+  candidate_window_days: 10       # ML candidate generation window
+  ml_threshold: 0.85              # >= this -> auto-match (tier 3)
+  ml_suggest_threshold: 0.50      # >= this -> exception WITH suggested candidate
+
+ledger:
+  # Empty -> SQLite at data/reconpilot.db (default, zero setup).
+  # Set DATABASE_URL=postgresql://reconpilot:reconpilot@localhost:5432/reconpilot
+  # (after `docker compose up -d`) for Postgres.
+  database_url: ""
+
+demo:
+  period_start: "2010-11-01"
+  period_end: "2010-11-30"
+  random_seed: 42
